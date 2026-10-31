@@ -1,0 +1,44 @@
+
+#IAM Least-Privilege Policy
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowUserSpecificActionsOnlyInTheSpecificPrefix",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": "arn:aws:s3:::cafe-your-unique-bucket-name/images/*"
+    }
+  ]
+}
+
+
+#Event Notification Configuration
+{
+    "TopicConfigurations": [
+      {
+        "TopicArn": "arn:aws:sns:us-west-2:123456789012:s3NotificationTopic",
+        "Events": [
+            "s3:ObjectCreated:*",
+            "s3:ObjectRemoved:*"
+        ],
+        "Filter": {
+          "Key": {
+            "FilterRules": [
+              {
+                "Name": "prefix",
+                "Value": "images/"
+              }
+            ]
+          }
+        }
+      }
+    ]
+}
+
+
+
